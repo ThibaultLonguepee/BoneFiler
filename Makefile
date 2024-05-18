@@ -8,6 +8,10 @@
 NAME	:= bonefiler
 
 SRC	:=	src/main.cpp \
+		src/Fire.cpp \
+		src/File.cpp \
+		src/FileLister.cpp \
+		src/Renderer.cpp
 
 OBJ	:=	$(SRC:.cpp=.o)
 
