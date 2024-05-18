@@ -18,12 +18,15 @@ int main(void)
     sf::RenderWindow win(sf::VideoMode(600, 600), "Hey");
     bf::Renderer renderer(win);
 
-    fire.feed(1000000);
+    fire.feed(500000);
+    auto clock = sf::Clock();
     while (win.isOpen()) {
+        double dt = clock.restart().asSeconds();
         sf::Event event;
         while (win.pollEvent(event))
             if (event.type == sf::Event::Closed) {
                 win.close(); return 0; }
+        fire.run(dt);
         win.clear();
         renderer.draw(fire);
         renderer.draw(lister.run(.1));

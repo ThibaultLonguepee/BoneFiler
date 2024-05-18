@@ -23,12 +23,15 @@ namespace bf {
 
         protected:
         private:
+            const double _scale = 1.5625;
+
             sf::RenderWindow& _win;
             sf::Font _font;
             sf::Texture _fileTex;
             sf::Texture _folderTex;
+
             sf::Texture _fireMinTex;
+            sf::Texture _fireMedTex;
             sf::Texture _fireMaxTex;
-            const double _scale = 1.5625;
     };
 }

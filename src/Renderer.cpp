@@ -14,6 +14,7 @@ bf::Renderer::Renderer(sf::RenderWindow& window)
     this->_fileTex.loadFromFile("assets/file.png");
     this->_folderTex.loadFromFile("assets/folder.png");
     this->_fireMinTex.loadFromFile("assets/fire_min.png");
+    this->_fireMedTex.loadFromFile("assets/fire_med.png");
     this->_fireMaxTex.loadFromFile("assets/fire_max.png");
 }
 
@@ -24,6 +25,13 @@ void bf::Renderer::draw(std::vector<File>& files) const
     auto name = sf::Text("", this->_font, 14);
     auto size = sf::Text("", this->_font, 11);
 
+    auto mouse = sf::Mouse::getPosition(this->_win);
+    auto outline = sf::CircleShape(32.f);
+    outline.setOrigin(32.f, 32.f);
+    outline.setFillColor(sf::Color::Transparent);
+    outline.setOutlineThickness(5.f);
+    outline.setOutlineColor(sf::Color(255, 0, 77));
+
     for (std::size_t i = 0; i < files.size(); i++) {
         auto pos = sf::Vector2f(
             std::cos(angle * i - M_PI_2) * 200.f + 300.f,
@@ -31,6 +39,7 @@ void bf::Renderer::draw(std::vector<File>& files) const
 
         sprite.setTexture(files.at(i).folder() ? this->_folderTex : this->_fileTex);
         sprite.setPosition(pos);
+        outline.setPosition(pos);
         sprite.setScale(this->_scale, this->_scale);
         sprite.setOrigin(sf::Vector2f(16.f, 16.f));
 
@@ -45,15 +54,30 @@ void bf::Renderer::draw(std::vector<File>& files) const
         this->_win.draw(sprite);
         this->_win.draw(name);
         this->_win.draw(size);
+        if (sprite.getGlobalBounds().contains(mouse.x, mouse.y))
+            this->_win.draw(outline);
     }
 }
 
 void bf::Renderer::draw(Fire& fire) const
 {
-    auto tex = fire.lifespan() > 60 ? this->_fireMaxTex : this->_fireMinTex;
-    auto sprite = sf::Sprite(tex);
+    sf::Texture tex;
+    if (fire.state() == FireSize::Extinguished) return;
+    if (fire.state() == FireSize::Big) tex = this->_fireMaxTex;
+    if (fire.state() == FireSize::Medium) tex = this->_fireMedTex;
+    if (fire.state() == FireSize::Small) tex = this->_fireMinTex;
+    auto frame = 7 - (static_cast<int>(fire.lifespan() * 8) % 8);
+    auto rect = sf::IntRect(sf::Vector2i(frame * 64, 0), sf::Vector2i(64, 64));
+    auto sprite = sf::Sprite(tex, rect);
+
+    auto life = sf::Text(fire.flifespan(), this->_font, 24);
+    auto offset = (100.0 - life.getLocalBounds().width) / 2.0 - 50.0;
+    life.setPosition(300.f + offset, 350.f);
+
     sprite.setOrigin(32.f, 32.f);
     sprite.setPosition(300.f, 300.f);
     sprite.setScale(this->_scale, this->_scale);
+
     this->_win.draw(sprite);
+    this->_win.draw(life);
 }

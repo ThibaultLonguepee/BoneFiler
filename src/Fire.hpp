@@ -13,6 +13,14 @@
 #include <sstream>
 
 namespace bf {
+
+    enum FireSize : int {
+        Extinguished,
+        Small,
+        Medium,
+        Big
+    };
+
     class Fire {
         public:
             Fire() = default;
@@ -21,6 +29,7 @@ namespace bf {
             void feed(std::uint32_t);
             void run(double);
             double lifespan() const { return this->_lifespan; }
+            FireSize state() const;
             std::string flifespan() const;
             sf::Sprite render() const = delete;
 

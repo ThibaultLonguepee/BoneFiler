@@ -33,3 +33,14 @@ std::string bf::Fire::flifespan() const
         ss << seconds << "s";
     return ss.str();
 }
+
+bf::FireSize bf::Fire::state() const
+{
+    if (this->_lifespan > 60)
+        return FireSize::Big;
+    if (this->_lifespan > 10)
+        return FireSize::Medium;
+    if (this->_lifespan > 0)
+        return FireSize::Small;
+    return FireSize::Extinguished;
+}
