@@ -16,7 +16,7 @@ std::vector<bf::File>& bf::FileLister::run(double deltaTime)
     for (const auto & entry : std::filesystem::directory_iterator(".")) {
         auto name = entry.path().filename();
         auto size = this->entrySize(entry);
-        this->_files.push_back(File(name, size));
+        this->_files.push_back(File(name, size, entry.is_directory()));
     }
     this->_timeout = 1.0;
     return this->_files;

@@ -16,7 +16,7 @@ bf::File::File(const std::string& path)
     this->_size = info.st_size;
 }
 
-bf::File::File(const std::string& name, std::uint32_t size)
-    : _name(name), _size(size)
+bf::File::File(const std::string& name, std::uint32_t size, bool folder)
+    : _name(name), _size(size), _folder(folder)
 {
 }

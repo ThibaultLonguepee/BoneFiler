@@ -16,15 +16,17 @@
 namespace bf {
     class File {
         public:
-            File(const std::string& name, std::uint32_t size);
+            File(const std::string& name, std::uint32_t size, bool folder);
             File(const std::string& path);
             ~File() = default;
 
             std::string name() const { return this->_name; }
             std::uint32_t size() const { return this->_size; }
+            bool folder() const { return this->_folder; }
         protected:
         private:
             std::string _name = "";
             std::uint32_t _size = 0;
+            bool _folder = false;
     };
 }
