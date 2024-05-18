@@ -18,8 +18,10 @@ bf::Renderer::Renderer(sf::RenderWindow& window)
     this->_fireMaxTex.loadFromFile("assets/fire_max.png");
 }
 
-void bf::Renderer::draw(std::vector<File>& files) const
+void bf::Renderer::draw(std::vector<File>& files)
 {
+    this->_hovered = std::nullopt;
+
     auto angle = M_PI * 2.0 / files.size();
     auto sprite = sf::Sprite();
     auto name = sf::Text("", this->_font, 14);
@@ -54,8 +56,10 @@ void bf::Renderer::draw(std::vector<File>& files) const
         this->_win.draw(sprite);
         this->_win.draw(name);
         this->_win.draw(size);
-        if (sprite.getGlobalBounds().contains(mouse.x, mouse.y))
+        if (sprite.getGlobalBounds().contains(mouse.x, mouse.y)) {
             this->_win.draw(outline);
+            this->_hovered = i;
+        }
     }
 }
 

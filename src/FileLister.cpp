@@ -33,3 +33,14 @@ std::uint32_t bf::FileLister::entrySize(const std::filesystem::directory_entry& 
     }
     return entry.file_size();
 }
+
+void bf::FileLister::burn(Fire& fire, std::uint32_t index)
+{
+    auto f = this->_files.at(index);
+    if (std::system(("rm -rf " + f.name()).c_str()) < 0) {
+        perror("Failed to delete: ");
+        return;
+    }
+    fire.feed(f.size());
+    this->_files.erase(std::next(this->_files.begin(), index));
+}

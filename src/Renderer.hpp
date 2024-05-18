@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <optional>
 #include <cmath>
 #include "Fire.hpp"
 #include "File.hpp"
@@ -18,12 +19,14 @@ namespace bf {
             Renderer(sf::RenderWindow& window);
             ~Renderer() = default;
 
-            void draw(std::vector<File>& files) const;
+            void draw(std::vector<File>& files);
             void draw(Fire& files) const;
+            std::optional<std::uint32_t> hovered() const { return this->_hovered; };
 
         protected:
         private:
             const double _scale = 1.5625;
+            std::optional<std::uint32_t> _hovered;
 
             sf::RenderWindow& _win;
             sf::Font _font;

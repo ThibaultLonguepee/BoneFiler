@@ -10,6 +10,7 @@
 #include <vector>
 #include <filesystem>
 #include "File.hpp"
+#include "Fire.hpp"
 
 namespace bf {
     class FileLister {
@@ -18,6 +19,7 @@ namespace bf {
             ~FileLister() = default;
 
             std::vector<File>& run(double);
+            void burn(Fire& fire, std::uint32_t index);
 
         protected:
         private:
