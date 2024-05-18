@@ -18,6 +18,7 @@ std::vector<bf::File>& bf::FileLister::run(double deltaTime)
         auto size = this->entrySize(entry);
         this->_files.push_back(File(name, size));
     }
+    this->_timeout = 1.0;
     return this->_files;
 }
 

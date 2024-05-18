@@ -6,13 +6,25 @@
 */
 
 #include <iostream>
+#include <SFML/Graphics.hpp>
 #include "FileLister.hpp"
 
 int main(void)
 {
     bf::FileLister lister;
-    auto files = lister.run(.0);
-    for (std::size_t i = 0; i < files.size(); i++)
-        std::cout << files.at(i).name() << " -> " << files.at(i).size() << " B" << std::endl;
+    sf::RenderWindow win(sf::VideoMode(600, 600), "Hey");
+    sf::Font font; font.loadFromFile("assets/regular.ttf");
+
+    while (win.isOpen()) {
+        sf::Event event;
+        while (win.pollEvent(event))
+            if (event.type == sf::Event::Closed) {
+                win.close(); return 0; }
+        auto files = lister.run(.1);
+        win.clear();
+        for (std::size_t i = 0; i < files.size(); i++)
+            ;
+        win.display();
+    }
     return 0;
 }
