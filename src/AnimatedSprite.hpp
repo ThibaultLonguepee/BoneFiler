@@ -16,6 +16,7 @@ namespace bf {
             AnimatedSprite(const std::string& path, double = 0.2, int = 1, bool = true, bool = true);
             ~AnimatedSprite() = default;
 
+            bool hovered(sf::Vector2i p) const { return this->_sprite.getGlobalBounds().contains(p.x, p.y); }
             bool playing() const { return this->_playing; }
             void play() { this->_playing = true; }
             void pause() { this->_playing = false; }

@@ -7,13 +7,13 @@
 
 #pragma once
 
-#include <optional>
 #include <cmath>
-#include "Fire.hpp"
-#include "File.hpp"
-#include "AnimatedSprite.hpp"
+#include <optional>
 #include <SFML/Graphics.hpp>
-#include <filesystem>
+
+#include "Fire.hpp"
+#include "FileManager.hpp"
+#include "AnimatedSprite.hpp"
 
 namespace bf {
     class Renderer {
@@ -21,8 +21,8 @@ namespace bf {
             Renderer(sf::RenderWindow& window);
             ~Renderer() = default;
 
-            void draw(std::vector<File>&);
-            void draw(Fire&, double dt);
+            void draw(FileManager&, double);
+            void draw(Fire&, double);
             std::optional<std::uint32_t> hovered() const { return this->_hovered; };
 
         protected:
@@ -34,10 +34,9 @@ namespace bf {
             sf::RenderWindow& _win;
             sf::Font _font;
             sf::Texture _bgTex;
-            sf::Texture _fileTex;
-            sf::Texture _folderTex;
-            bf::AnimatedSprite _fire;
-            bf::AnimatedSprite _light;
-            bf::AnimatedSprite _weight;
+
+            AnimatedSprite _fire;
+            AnimatedSprite _light;
+            AnimatedSprite _weight;
     };
 }
