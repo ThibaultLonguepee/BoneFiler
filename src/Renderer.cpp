@@ -19,7 +19,7 @@ bf::Renderer::Renderer(sf::RenderWindow& window) : _win(window)
     this->_fire.setPosition(300, 300, true);
     this->_fire.setSize(100, 100);
 
-    this->_light = AnimatedSprite(path + "/assets/light.png");
+    this->_light = AnimatedSprite(path + "/assets/light.png", 0.4, 3);
     this->_light.setSize(600, 600);
 }
 
@@ -71,13 +71,15 @@ void bf::Renderer::draw(std::vector<File>& files)
     }
 }
 
-#include <iostream>
 void bf::Renderer::draw(Fire& fire, double dt)
 {
     if (fire.state() == FireSize::Extinguished) return;
-    if (fire.state() == FireSize::Big) this->_fire.setAnimation(0);
-    if (fire.state() == FireSize::Medium) this->_fire.setAnimation(1);
-    if (fire.state() == FireSize::Small) this->_fire.setAnimation(2);
+    if (fire.state() == FireSize::Big) {
+        this->_fire.setAnimation(0); this->_light.setAnimation(0); }
+    if (fire.state() == FireSize::Medium) {
+        this->_fire.setAnimation(1); this->_light.setAnimation(1); }
+    if (fire.state() == FireSize::Small) {
+        this->_fire.setAnimation(2); this->_light.setAnimation(2); }
 
     auto life = sf::Text(fire.flifespan(), this->_font, 24);
     auto offset = (100.0 - life.getLocalBounds().width) / 2.0 - 50.0;
