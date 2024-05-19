@@ -38,5 +38,6 @@ namespace bf {
             AnimatedSprite _fire;
             AnimatedSprite _light;
             AnimatedSprite _weight;
+            AnimatedSprite _cursor;
     };
 }

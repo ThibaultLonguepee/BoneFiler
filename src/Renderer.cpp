@@ -22,6 +22,9 @@ bf::Renderer::Renderer(sf::RenderWindow& window) : _win(window)
 
     this->_weight = AnimatedSprite(path + "/assets/weight.png", 1, 3, false, false);
     this->_weight.setSize(25, 25);
+
+    this->_cursor = AnimatedSprite(path + "/assets/cursor.png");
+    this->_cursor.setSize(25, 25);
 }
 
 void bf::Renderer::draw(FileManager& manager, double dt)
@@ -33,12 +36,6 @@ void bf::Renderer::draw(FileManager& manager, double dt)
     auto name = sf::Text("", this->_font, 14);
     name.setStyle(sf::Text::Bold);
 
-    auto outline = sf::CircleShape(32.f);
-    outline.setOrigin(32.f, 32.f);
-    outline.setFillColor(sf::Color::Transparent);
-    outline.setOutlineThickness(5.f);
-    outline.setOutlineColor(sf::Color(255, 0, 77));
-
     for (auto file = files.begin(); file != files.end(); file++) {
 
         // Compute file pos
@@ -47,7 +44,7 @@ void bf::Renderer::draw(FileManager& manager, double dt)
             std::cos(angle - M_PI_2) * 200.f + 300.f,
             std::sin(angle - M_PI_2) * 200.f + 300.f);
         file->sprite().setPosition(pos.x, pos.y, true);
-        outline.setPosition(pos);
+        this->_cursor.setPosition(pos.x, pos.y, true);
 
         // Setup name tag
         name.setString(file->file().name());
@@ -63,10 +60,10 @@ void bf::Renderer::draw(FileManager& manager, double dt)
         // Draw stuff & check hover
         bool h = file->sprite().hovered(sf::Mouse::getPosition(this->_win));
         file->setHovered(h);
-        if (h) this->_win.draw(outline);
         this->_win.draw(file->sprite().render(dt));
-        this->_win.draw(this->_weight.render(.0));
+        this->_win.draw(this->_weight.render(dt));
         this->_win.draw(name);
+        if (h) this->_win.draw(this->_cursor.render(dt));
     }
 }
 
