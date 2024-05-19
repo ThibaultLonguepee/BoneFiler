@@ -14,7 +14,7 @@
 
 namespace bf {
 
-    enum FireSize : int {
+    enum class FireSize : int {
         Extinguished,
         Small,
         Medium,

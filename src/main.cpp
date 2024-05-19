@@ -21,6 +21,7 @@ int main(void)
     auto clock = sf::Clock();
     std::optional<std::uint32_t> selected = std::nullopt;
 
+    fire.feed(40000);
     while (win.isOpen()) {
         double dt = clock.restart().asSeconds();
         auto& files = lister.run(dt);
