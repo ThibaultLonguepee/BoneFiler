@@ -11,6 +11,7 @@ SRC	:=	src/main.cpp \
 		src/Fire.cpp \
 		src/File.cpp \
 		src/FileLister.cpp \
+		src/FileManager.cpp \
 		src/Renderer.cpp \
 		src/AnimatedSprite.cpp
 
