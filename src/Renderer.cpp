@@ -7,15 +7,15 @@
 
 #include "Renderer.hpp"
 
-bf::Renderer::Renderer(sf::RenderWindow& window)
-    : _win(window)
+bf::Renderer::Renderer(sf::RenderWindow& window) : _win(window)
 {
-    this->_font.loadFromFile("assets/regular.ttf");
-    this->_fileTex.loadFromFile("assets/file.png");
-    this->_folderTex.loadFromFile("assets/folder.png");
-    this->_fireMinTex.loadFromFile("assets/fire_min.png");
-    this->_fireMedTex.loadFromFile("assets/fire_med.png");
-    this->_fireMaxTex.loadFromFile("assets/fire_max.png");
+    this->_path = std::filesystem::canonical("/proc/self/exe").parent_path();
+    this->_font.loadFromFile(this->_path + "/assets/regular.ttf");
+    this->_fileTex.loadFromFile(this->_path + "/assets/file.png");
+    this->_folderTex.loadFromFile(this->_path + "/assets/folder.png");
+    this->_fireMinTex.loadFromFile(this->_path + "/assets/fire_min.png");
+    this->_fireMedTex.loadFromFile(this->_path + "/assets/fire_med.png");
+    this->_fireMaxTex.loadFromFile(this->_path + "/assets/fire_max.png");
 }
 
 void bf::Renderer::draw(std::vector<File>& files)

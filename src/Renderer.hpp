@@ -12,6 +12,7 @@
 #include "Fire.hpp"
 #include "File.hpp"
 #include <SFML/Graphics.hpp>
+#include <filesystem>
 
 namespace bf {
     class Renderer {
@@ -25,6 +26,7 @@ namespace bf {
 
         protected:
         private:
+            std::string _path = "";
             const double _scale = 1.5625;
             std::optional<std::uint32_t> _hovered;
 
