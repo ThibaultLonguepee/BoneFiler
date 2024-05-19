@@ -11,7 +11,9 @@
 #include <cmath>
 #include "Fire.hpp"
 #include "File.hpp"
+#include "AnimatedSprite.hpp"
 #include <SFML/Graphics.hpp>
+#include <filesystem>
 
 namespace bf {
     class Renderer {
@@ -19,22 +21,23 @@ namespace bf {
             Renderer(sf::RenderWindow& window);
             ~Renderer() = default;
 
-            void draw(std::vector<File>& files);
-            void draw(Fire& files) const;
+            void draw(std::vector<File>&);
+            void draw(Fire&, double dt);
             std::optional<std::uint32_t> hovered() const { return this->_hovered; };
 
         protected:
         private:
             const double _scale = 1.5625;
+            double _timer = .0;
             std::optional<std::uint32_t> _hovered;
 
             sf::RenderWindow& _win;
             sf::Font _font;
+            sf::Texture _bgTex;
             sf::Texture _fileTex;
             sf::Texture _folderTex;
-
-            sf::Texture _fireMinTex;
-            sf::Texture _fireMedTex;
-            sf::Texture _fireMaxTex;
+            bf::AnimatedSprite _fire;
+            bf::AnimatedSprite _light;
+            bf::AnimatedSprite _weight;
     };
 }

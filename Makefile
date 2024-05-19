@@ -11,7 +11,8 @@ SRC	:=	src/main.cpp \
 		src/Fire.cpp \
 		src/File.cpp \
 		src/FileLister.cpp \
-		src/Renderer.cpp
+		src/Renderer.cpp \
+		src/AnimatedSprite.cpp
 
 OBJ	:=	$(SRC:.cpp=.o)
 

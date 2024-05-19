@@ -7,15 +7,23 @@
 
 #include "Renderer.hpp"
 
-bf::Renderer::Renderer(sf::RenderWindow& window)
-    : _win(window)
+bf::Renderer::Renderer(sf::RenderWindow& window) : _win(window)
 {
-    this->_font.loadFromFile("assets/regular.ttf");
-    this->_fileTex.loadFromFile("assets/file.png");
-    this->_folderTex.loadFromFile("assets/folder.png");
-    this->_fireMinTex.loadFromFile("assets/fire_min.png");
-    this->_fireMedTex.loadFromFile("assets/fire_med.png");
-    this->_fireMaxTex.loadFromFile("assets/fire_max.png");
+    auto path = std::filesystem::canonical("/proc/self/exe").parent_path().string();
+    this->_font.loadFromFile(path + "/assets/regular.ttf");
+    this->_fileTex.loadFromFile(path + "/assets/file.png");
+    this->_folderTex.loadFromFile(path + "/assets/folder.png");
+    this->_bgTex.loadFromFile(path + "/assets/background.png");
+
+    this->_fire = AnimatedSprite(path + "/assets/fire.png", 0.2, 3);
+    this->_fire.setPosition(300, 300, true);
+    this->_fire.setSize(100, 100);
+
+    this->_light = AnimatedSprite(path + "/assets/light.png", 0.4, 3);
+    this->_light.setSize(600, 600);
+
+    this->_weight = AnimatedSprite(path + "/assets/weight.png", 1, 3, false, false);
+    this->_weight.setSize(25, 25);
 }
 
 void bf::Renderer::draw(std::vector<File>& files)
@@ -24,8 +32,9 @@ void bf::Renderer::draw(std::vector<File>& files)
 
     auto angle = M_PI * 2.0 / files.size();
     auto sprite = sf::Sprite();
-    auto name = sf::Text("", this->_font, 14);
-    auto size = sf::Text("", this->_font, 11);
+    this->_font.setSmooth(false);
+    auto name = sf::Text("", this->_font, 18);
+    name.setStyle(sf::Text::Bold);
 
     auto mouse = sf::Mouse::getPosition(this->_win);
     auto outline = sf::CircleShape(32.f);
@@ -47,15 +56,17 @@ void bf::Renderer::draw(std::vector<File>& files)
 
         name.setString(files.at(i).name());
         auto offset = (50.0 - name.getLocalBounds().width) / 2.0 - 25.0;
-        name.setPosition(pos.x + offset, pos.y + 20.f);
+        name.setPosition(pos.x + offset, pos.y + 25.f);
 
-        size.setString(std::to_string(files.at(i).size()));
-        offset = (50.0 - size.getLocalBounds().width) / 2.0 - 25.0;
-        size.setPosition(pos.x + offset, pos.y + 36.f);
+        this->_weight.setPosition(pos.x, pos.y - 35.f, true);
+        if (files.at(i).heavy()) this->_weight.setAnimation(2);
+        else if (files.at(i).light()) this->_weight.setAnimation(1);
+        else this->_weight.setAnimation(0);
 
+        this->_win.draw(this->_weight.render(.0));
         this->_win.draw(sprite);
         this->_win.draw(name);
-        this->_win.draw(size);
+        //this->_win.draw(size);
         if (sprite.getGlobalBounds().contains(mouse.x, mouse.y)) {
             this->_win.draw(outline);
             this->_hovered = i;
@@ -63,25 +74,30 @@ void bf::Renderer::draw(std::vector<File>& files)
     }
 }
 
-void bf::Renderer::draw(Fire& fire) const
+void bf::Renderer::draw(Fire& fire, double dt)
 {
-    sf::Texture tex;
     if (fire.state() == FireSize::Extinguished) return;
-    if (fire.state() == FireSize::Big) tex = this->_fireMaxTex;
-    if (fire.state() == FireSize::Medium) tex = this->_fireMedTex;
-    if (fire.state() == FireSize::Small) tex = this->_fireMinTex;
-    auto frame = 7 - (static_cast<int>(fire.lifespan() * 8) % 8);
-    auto rect = sf::IntRect(sf::Vector2i(frame * 64, 0), sf::Vector2i(64, 64));
-    auto sprite = sf::Sprite(tex, rect);
+    if (fire.state() == FireSize::Big) {
+        this->_fire.setAnimation(0); this->_light.setAnimation(0); }
+    if (fire.state() == FireSize::Medium) {
+        this->_fire.setAnimation(1); this->_light.setAnimation(1); }
+    if (fire.state() == FireSize::Small) {
+        this->_fire.setAnimation(2); this->_light.setAnimation(2); }
 
     auto life = sf::Text(fire.flifespan(), this->_font, 24);
     auto offset = (100.0 - life.getLocalBounds().width) / 2.0 - 50.0;
     life.setPosition(300.f + offset, 350.f);
 
-    sprite.setOrigin(32.f, 32.f);
-    sprite.setPosition(300.f, 300.f);
-    sprite.setScale(this->_scale, this->_scale);
+    sf::Sprite tile(this->_bgTex);
+    tile.setScale(this->_scale, this->_scale);
+    for (std::uint32_t x = 0; x < this->_win.getSize().x; x += 50) {
+        for (std::uint32_t y = 0; y < this->_win.getSize().y; y += 50) {
+            tile.setPosition(x, y);
+            this->_win.draw(tile);
+        }
+    }
 
-    this->_win.draw(sprite);
     this->_win.draw(life);
+    this->_win.draw(this->_fire.render(dt));
+    this->_win.draw(this->_light.render(dt));
 }
