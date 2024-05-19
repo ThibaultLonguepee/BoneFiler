@@ -18,13 +18,11 @@ namespace bf {
             FileLister() = default;
             ~FileLister() = default;
 
-            std::vector<File>& run(double);
-            void burn(Fire& fire, std::uint32_t index);
+            std::vector<File>& run();
 
         protected:
         private:
             std::uint32_t entrySize(const std::filesystem::directory_entry& entry) const;
-            double _timeout = .0;
             std::vector<File> _files = {};
     };
 }
