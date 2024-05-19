@@ -21,7 +21,7 @@ int main(void)
     auto clock = sf::Clock();
     std::optional<std::uint32_t> selected = std::nullopt;
 
-    fire.feed(40000);
+    fire.feed(3000);
     while (win.isOpen()) {
         double dt = clock.restart().asSeconds();
         auto& files = lister.run(dt);
@@ -37,7 +37,7 @@ int main(void)
 
         fire.run(dt);
         win.clear();
-        renderer.draw(fire);
+        renderer.draw(fire, dt);
         renderer.draw(files);
         selected = renderer.hovered();
         win.display();
