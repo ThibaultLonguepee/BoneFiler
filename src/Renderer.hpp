@@ -38,5 +38,6 @@ namespace bf {
             sf::Texture _folderTex;
             bf::AnimatedSprite _fire;
             bf::AnimatedSprite _light;
+            bf::AnimatedSprite _weight;
     };
 }

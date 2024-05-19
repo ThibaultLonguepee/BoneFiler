@@ -21,6 +21,9 @@ bf::Renderer::Renderer(sf::RenderWindow& window) : _win(window)
 
     this->_light = AnimatedSprite(path + "/assets/light.png", 0.4, 3);
     this->_light.setSize(600, 600);
+
+    this->_weight = AnimatedSprite(path + "/assets/weight.png", 1, 3, false, false);
+    this->_weight.setSize(25, 25);
 }
 
 void bf::Renderer::draw(std::vector<File>& files)
@@ -32,8 +35,6 @@ void bf::Renderer::draw(std::vector<File>& files)
     this->_font.setSmooth(false);
     auto name = sf::Text("", this->_font, 18);
     name.setStyle(sf::Text::Bold);
-    auto size = sf::Text("", this->_font, 11);
-    size.setStyle(sf::Text::Bold);
 
     auto mouse = sf::Mouse::getPosition(this->_win);
     auto outline = sf::CircleShape(32.f);
@@ -57,10 +58,12 @@ void bf::Renderer::draw(std::vector<File>& files)
         auto offset = (50.0 - name.getLocalBounds().width) / 2.0 - 25.0;
         name.setPosition(pos.x + offset, pos.y + 25.f);
 
-        size.setString(std::to_string(files.at(i).size()));
-        offset = (50.0 - size.getLocalBounds().width) / 2.0 - 25.0;
-        size.setPosition(pos.x + offset, pos.y + 36.f);
+        this->_weight.setPosition(pos.x, pos.y - 35.f, true);
+        if (files.at(i).heavy()) this->_weight.setAnimation(2);
+        else if (files.at(i).light()) this->_weight.setAnimation(1);
+        else this->_weight.setAnimation(0);
 
+        this->_win.draw(this->_weight.render(.0));
         this->_win.draw(sprite);
         this->_win.draw(name);
         //this->_win.draw(size);

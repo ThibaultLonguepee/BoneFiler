@@ -23,6 +23,9 @@ namespace bf {
             std::string name() const { return this->_name; }
             std::uint32_t size() const { return this->_size; }
             bool folder() const { return this->_folder; }
+
+            bool heavy() const { return this->_size > (10 * 1000 * 1000); }
+            bool light() const { return this->_size < 1000; }
         protected:
         private:
             std::string _name = "";
